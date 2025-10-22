@@ -2,9 +2,15 @@
   <div class="app">
     <header class="app-header">
       <h1 class="app-title">Страница с постами</h1>
-      <my-button @click="showDialog">
-        Создать пост
-      </my-button>
+      <div class="app-header-btns">
+        <my-button @click="showDialog">
+          Создать пост
+        </my-button>
+        <my-select
+            v-model="selectedSort"
+            :options="sortOptions"
+        ></my-select>
+      </div>
     </header>
 
     <my-dialog v-model:show="dialogVisible">
@@ -16,7 +22,7 @@
     <main class="app-main">
       <post-list
           v-if="!isPostsLoading"
-          :posts="posts"
+          :posts="sortedPosts"
           @remove="removePost"
       />
       <div v-else class="loader-container">
@@ -40,7 +46,12 @@ export default {
     return {
       posts: [],
       dialogVisible: false,
-      isPostsLoading: false
+      isPostsLoading: false,
+      selectedSort: '',
+      sortOptions: [
+        {value: 'title', name: 'По названию'},
+        {value: 'body', name: 'По содержимому'},
+      ]
     }
   },
   methods: {
@@ -68,6 +79,15 @@ export default {
   },
   mounted() {
     this.fetchPosts();
+  },
+  watch: {
+  },
+  computed: {
+    sortedPosts() {
+      return [...this.posts].sort((post1, post2) => {
+        return (post1[this.selectedSort] ?? '').localeCompare(post2[this.selectedSort] ?? '');
+      })
+    }
   }
 }
 </script>
@@ -90,11 +110,11 @@ export default {
 
 
 .app-header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   width: 100%;
   max-width: 800px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-bottom: 32px;
   padding: 0 20px;
 }
@@ -104,6 +124,12 @@ export default {
   font-weight: 700;
   color: #1a1a1a;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.app-header-btns {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .loader-container {
@@ -119,7 +145,7 @@ export default {
 .loader {
   width: 48px;
   height: 48px;
-  border: 4px solid #e2e8f0;
+  border: 4px solid transparent;
   border-top: 4px solid #3b82f6;
   border-radius: 50%;
   animation: spin 1s linear infinite;
