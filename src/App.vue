@@ -5,6 +5,7 @@
     />
     <post-list
         :posts="mockPosts"
+        @remove="removePost"
     />
   </div>
 </template>
@@ -32,6 +33,9 @@ export default {
     createPost(post) {
       this.mockPosts.push(post);
     },
+    removePost(post) {
+      this.mockPosts = this.mockPosts.filter(p => p.id !== post.id);
+    }
   }
 }
 </script>

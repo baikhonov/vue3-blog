@@ -6,6 +6,7 @@
 
 <script>
 export default {
+  name: 'my-button',
   props: {
     fullWidth: {
       type: Boolean,
@@ -48,6 +49,17 @@ export default {
 .btn:active {
   transform: translateY(0);
 }
+
+
+.btn-delete {
+  background: #dc2626;
+}
+
+.btn-delete:hover {
+  background: #b91c1c;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
 
 /* Адаптивность */
 @media (max-width: 768px) {

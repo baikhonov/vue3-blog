@@ -5,7 +5,9 @@
       <div class="post-description">{{ post.body }}</div>
     </div>
     <div class="post-actions">
-      <my-button class="btn-delete">
+      <my-button class="btn-delete"
+        @click="$emit('remove', post)"
+      >
         <span class="btn-icon">🗑️</span>
         Удалить
       </my-button>
@@ -14,9 +16,7 @@
 </template>
 
 <script>
-import MyButton from "@/components/UI/MyButton";
 export default {
-  components: { MyButton },
   props: {
     post: {
       type: Object,
@@ -29,7 +29,6 @@ export default {
 <style scoped>
 .post-card {
   width: 100%;
-  max-width: 500px;
   margin-bottom: 16px;
   padding: 20px;
   background: white;
@@ -42,6 +41,7 @@ export default {
   justify-content: space-between;
   align-items: flex-start;
   gap: 16px;
+  box-sizing: border-box;
 }
 
 .post-card:hover {
@@ -71,15 +71,6 @@ export default {
 
 .post-actions {
   flex-shrink: 0;
-}
-
-.btn-delete {
-  background: #dc2626;
-}
-
-.btn-delete:hover {
-  background: #b91c1c;
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 }
 
 .btn-icon {

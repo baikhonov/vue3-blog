@@ -2,29 +2,23 @@
   <form class="post-form" @submit.prevent>
     <h2 class="form-title">Создание поста</h2>
     <div class="form-group">
-      <input
+      <my-input
           v-model="post.title"
-          class="form-input"
           placeholder="Название"
-          type="text"
-      >
+      ></my-input>
     </div>
     <div class="form-group">
-      <input
+      <my-input
           v-model="post.body"
-          class="form-input"
           placeholder="Описание"
-          type="text"
-      >
+      ></my-input>
     </div>
     <my-button type="submit" @click="createPost" fullWidth>Создать</my-button>
   </form>
 </template>
 
 <script>
-import MyButton from "@/components/UI/MyButton";
 export default {
-  components: {MyButton},
   data() {
     return {
       post: {
@@ -49,7 +43,7 @@ export default {
 <style scoped>
 .post-form {
   width: 100%;
-  max-width: 500px;
+  max-width: 800px;
   margin-bottom: 24px;
   padding: 20px;
   background: white;
@@ -71,25 +65,6 @@ export default {
   margin-bottom: 12px;
 }
 
-.form-input {
-  width: 100%;
-  padding: 12px 14px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: 16px;
-  font-family: inherit;
-  transition: all 0.2s ease;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.form-input::placeholder {
-  color: #9ca3af;
-}
 
 /* Убрал дублирующиеся стили кнопки */
 
@@ -99,9 +74,6 @@ export default {
     margin-bottom: 12px;
   }
 
-  .form-input {
-    padding: 10px 12px;
-  }
 }
 
 @media (max-width: 480px) {
