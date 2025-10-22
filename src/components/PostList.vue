@@ -1,12 +1,20 @@
 <template>
-  <div v-for="post in posts" class="post-card">
-    <div class="post-title">{{ post.title }}</div>
-    <div class="post-description">{{ post.body }}</div>
+  <div class="posts-list">
+    <h3 class="posts-title">Список постов</h3>
+    <post-item
+        v-for="post in posts"
+        :post="post"
+    >
+    </post-item>
   </div>
+
 </template>
 
 <script>
+import PostItem from "@/components/PostItem";
+
 export default {
+  components: {PostItem},
   props: {
     posts: {
       type: Array,
@@ -17,62 +25,58 @@ export default {
 </script>
 
 <style scoped>
-.post-card {
-  width: 100%;
-  max-width: 500px;
-  margin-bottom: 16px;
+.posts-list {
   padding: 20px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border: 1px solid #eef2f6;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  transition: all 0.2s ease;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-.post-card:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  transform: translateY(-1px);
-}
-
-.post-title {
-  font-size: 18px;
+.posts-title {
+  font-size: 28px;
   font-weight: 700;
   color: #1a1a1a;
-  margin-bottom: 8px;
-  line-height: 1.4;
+  margin-bottom: 24px;
+  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  position: relative;
 }
 
-.post-description {
-  font-size: 15px;
-  line-height: 1.5;
-  color: #4a5568;
+.posts-title::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: #3b82f6;
+  margin: 8px auto 0;
+  border-radius: 2px;
 }
 
+/* Адаптивность для мобильных */
 @media (max-width: 768px) {
-  .post-card {
+  .posts-list {
     padding: 16px;
-    margin-bottom: 12px;
   }
 
-  .post-title {
-    font-size: 17px;
-  }
-
-  .post-description {
-    font-size: 14px;
+  .posts-title {
+    font-size: 24px;
+    margin-bottom: 20px;
   }
 }
 
 @media (max-width: 480px) {
-  .post-card {
-    padding: 14px;
-    border-radius: 10px;
+  .posts-list {
+    padding: 12px;
   }
 
-  .post-title {
-    font-size: 16px;
-    margin-bottom: 6px;
+  .posts-title {
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+
+  .posts-title::after {
+    width: 40px;
+    margin-top: 6px;
   }
 }
+
 </style>

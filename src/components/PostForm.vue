@@ -17,12 +17,14 @@
           type="text"
       >
     </div>
-    <button class="form-button" type="submit" @click="createPost">Создать</button>
+    <my-button type="submit" @click="createPost" fullWidth>Создать</my-button>
   </form>
 </template>
 
 <script>
+import MyButton from "@/components/UI/MyButton";
 export default {
+  components: {MyButton},
   data() {
     return {
       post: {
@@ -89,27 +91,7 @@ export default {
   color: #9ca3af;
 }
 
-.form-button {
-  width: 100%;
-  padding: 12px 16px;
-  background: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.form-button:hover {
-  background: #2563eb;
-  transform: translateY(-1px);
-}
-
-.form-button:active {
-  transform: translateY(0);
-}
+/* Убрал дублирующиеся стили кнопки */
 
 @media (max-width: 768px) {
   .post-form {
@@ -119,11 +101,6 @@ export default {
 
   .form-input {
     padding: 10px 12px;
-    font-size: 16px; /* Важно для iOS чтобы не зумился */
-  }
-
-  .form-button {
-    padding: 10px 14px;
   }
 }
 
