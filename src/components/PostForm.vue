@@ -44,12 +44,7 @@ export default {
 .post-form {
   width: 100%;
   max-width: 800px;
-  margin-bottom: 24px;
-  padding: 20px;
   background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border: 1px solid #eef2f6;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
