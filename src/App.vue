@@ -15,9 +15,14 @@
 
     <main class="app-main">
       <post-list
-          :posts="mockPosts"
+          v-if="!isPostsLoading"
+          :posts="posts"
           @remove="removePost"
       />
+      <div v-else class="loader-container">
+        <div class="loader"></div>
+        <p class="loader-text">Загружаем посты...</p>
+      </div>
     </main>
   </div>
 </template>
@@ -25,6 +30,7 @@
 <script>
 import PostForm from "@/components/PostForm";
 import PostList from "@/components/PostList";
+import axios from 'axios';
 
 export default {
   components: {
@@ -32,28 +38,36 @@ export default {
   },
   data() {
     return {
-      mockPosts: [
-        {id: 1, title: "Пост о JavaScript", body: "JavaScript один из самых популярных языков программирования"},
-        {
-          id: 2,
-          title: "Пост о Vue.js",
-          body: "Vue - прогрессивный фреймворк для создания пользовательских интерфейсов"
-        },
-      ],
-      dialogVisible: false
+      posts: [],
+      dialogVisible: false,
+      isPostsLoading: false
     }
   },
   methods: {
     createPost(post) {
-      this.mockPosts.push(post);
+      this.posts.push(post);
       this.dialogVisible = false;
     },
     removePost(post) {
-      this.mockPosts = this.mockPosts.filter(p => p.id !== post.id);
+      this.posts = this.posts.filter(p => p.id !== post.id);
     },
     showDialog() {
       this.dialogVisible = true;
+    },
+    async fetchPosts() {
+      try {
+        this.isPostsLoading = true;
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+        this.posts = response.data;
+      } catch (e) {
+        alert(`Ошибка ${e}`);
+      } finally {
+        this.isPostsLoading = false;
+      }
     }
+  },
+  mounted() {
+    this.fetchPosts();
   }
 }
 </script>
@@ -92,6 +106,43 @@ export default {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #e2e8f0;
+  border-top: 4px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+.loader-text {
+  font-size: 18px;
+  color: #64748b;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 500;
+  margin: 0;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 /* Мобильная адаптивность */
 @media (max-width: 768px) {
   .app {
@@ -108,6 +159,19 @@ export default {
   .app-title {
     font-size: 28px;
   }
+
+  .loader-container {
+    padding: 40px 16px;
+  }
+
+  .loader {
+    width: 40px;
+    height: 40px;
+  }
+
+  .loader-text {
+    font-size: 16px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -122,6 +186,20 @@ export default {
 
   .app-title {
     font-size: 24px;
+  }
+
+  .loader-container {
+    padding: 30px 12px;
+  }
+
+  .loader {
+    width: 36px;
+    height: 36px;
+    border-width: 3px;
+  }
+
+  .loader-text {
+    font-size: 15px;
   }
 }
 </style>
