@@ -33,6 +33,19 @@
         <div class="loader"></div>
         <p class="loader-text">Загружаем посты...</p>
       </div>
+      <div class="page__wrapper">
+        <div
+            v-for="pageNumber in totalPages"
+            :key="pageNumber"
+            :class="{
+              'active': page === pageNumber
+            }"
+            class="page"
+            @click="changePage(pageNumber)"
+        >
+          {{ pageNumber }}
+        </div>
+      </div>
     </main>
   </div>
 </template>
@@ -53,6 +66,9 @@ export default {
       isPostsLoading: false,
       selectedSort: '',
       searchQuery: '',
+      page: 1,
+      limit: 10,
+      totalPages: 0,
       sortOptions: [
         {value: 'title', name: 'По названию'},
         {value: 'body', name: 'По содержимому'},
@@ -73,19 +89,32 @@ export default {
     async fetchPosts() {
       try {
         this.isPostsLoading = true;
-        const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+          params: {
+            _page: this.page,
+            _limit: this.limit,
+          }
+        });
+        this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
         this.posts = response.data;
       } catch (e) {
         alert(`Ошибка ${e}`);
       } finally {
         this.isPostsLoading = false;
       }
+    },
+    changePage(pageNumber) {
+      this.page = pageNumber;
     }
   },
   mounted() {
     this.fetchPosts();
   },
-  watch: {},
+  watch: {
+    page() {
+      this.fetchPosts();
+    }
+  },
   computed: {
     sortedPosts() {
       return [...this.posts].sort((post1, post2) => {
@@ -176,6 +205,57 @@ export default {
   }
 }
 
+.page__wrapper {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 20px 0;
+}
+
+.page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 12px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  background-color: white;
+  color: #4a5568;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  user-select: none;
+}
+
+.page:hover {
+  border-color: #cbd5e0;
+  background-color: #f7fafc;
+  transform: translateY(-1px);
+}
+
+.page.active {
+  border-color: #4299e1;
+  background-color: #4299e1;
+  color: white;
+}
+
+.page.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.page.disabled:hover {
+  border-color: #e2e8f0;
+  background-color: white;
+  transform: none;
+}
+
 /* Мобильная адаптивность */
 @media (max-width: 768px) {
   .app {
@@ -204,6 +284,18 @@ export default {
 
   .loader-text {
     font-size: 16px;
+  }
+
+  .page__wrapper {
+    gap: 6px;
+    padding: 16px 0;
+  }
+
+  .page {
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
+    font-size: 13px;
   }
 }
 

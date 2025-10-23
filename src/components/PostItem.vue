@@ -1,6 +1,7 @@
 <template>
   <div class="post-card">
     <div class="post-content">
+      <div class="post-id">{{ post.id }}</div>
       <div class="post-title">{{ post.title }}</div>
       <div class="post-description">{{ post.body }}</div>
     </div>
@@ -51,6 +52,18 @@ export default {
 .post-content {
   flex: 1;
   min-width: 0;
+}
+
+.post-id {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  background-color: #f3f4f6;
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  display: inline-block;
+  letter-spacing: 0.5px;
 }
 
 .post-title {
