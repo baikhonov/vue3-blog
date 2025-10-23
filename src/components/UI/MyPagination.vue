@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  name: 'my-navigation',
+  name: 'my-pagination',
   props: {
     totalPages: {
       type: Number

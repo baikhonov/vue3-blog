@@ -6,10 +6,16 @@
       <div class="post-description">{{ post.body }}</div>
     </div>
     <div class="post-actions">
-      <my-button class="btn-delete"
-        @click="$emit('remove', post)"
+      <my-button
+          class="btn-open"
+          @click="$router.push(`/posts/${post.id}`)"
       >
-        <span class="btn-icon">🗑️</span>
+        Открыть
+      </my-button>
+      <my-button
+          class="btn-delete"
+          @click="$emit('remove', post)"
+      >
         Удалить
       </my-button>
     </div>
@@ -83,11 +89,10 @@ export default {
 }
 
 .post-actions {
+  display: flex;
+  flex-direction: column;
   flex-shrink: 0;
-}
-
-.btn-icon {
-  font-size: 16px;
+  gap: 8px;
 }
 
 /* Адаптивность для мобильных */
