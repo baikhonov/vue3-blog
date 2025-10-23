@@ -2,13 +2,15 @@
   <div v-if="posts.length > 0" class="posts-list">
     <h3 class="posts-title">Список постов</h3>
     <div class="posts-container">
-      <post-item
-          v-for="post in posts"
-          :key="post.id"
-          :post="post"
-          @remove="$emit('remove', post)"
-      >
-      </post-item>
+      <transition-group name="post-list">
+        <post-item
+            v-for="post in posts"
+            :key="post.id"
+            :post="post"
+            @remove="$emit('remove', post)"
+        >
+        </post-item>
+      </transition-group>
     </div>
 
   </div>
@@ -90,6 +92,17 @@ export default {
   color: #9ca3af;
   line-height: 1.5;
   margin: 0;
+}
+
+.post-list-move,
+.post-list-enter-active,
+.post-list-leave-active {
+  transition: all 0.4s ease;
+}
+.post-list-enter-from,
+.post-list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
 }
 
 /* Адаптивность для мобильных */

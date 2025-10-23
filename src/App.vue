@@ -2,6 +2,10 @@
   <div class="app">
     <header class="app-header">
       <h1 class="app-title">Страница с постами</h1>
+      <my-input
+          v-model="searchQuery"
+          placeholder="Поиск"
+      ></my-input>
       <div class="app-header-btns">
         <my-button @click="showDialog">
           Создать пост
@@ -22,7 +26,7 @@
     <main class="app-main">
       <post-list
           v-if="!isPostsLoading"
-          :posts="sortedPosts"
+          :posts="sortedAndSearchedPosts"
           @remove="removePost"
       />
       <div v-else class="loader-container">
@@ -48,6 +52,7 @@ export default {
       dialogVisible: false,
       isPostsLoading: false,
       selectedSort: '',
+      searchQuery: '',
       sortOptions: [
         {value: 'title', name: 'По названию'},
         {value: 'body', name: 'По содержимому'},
@@ -80,13 +85,15 @@ export default {
   mounted() {
     this.fetchPosts();
   },
-  watch: {
-  },
+  watch: {},
   computed: {
     sortedPosts() {
       return [...this.posts].sort((post1, post2) => {
         return (post1[this.selectedSort] ?? '').localeCompare(post2[this.selectedSort] ?? '');
       })
+    },
+    sortedAndSearchedPosts() {
+      return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchQuery.toLowerCase()));
     }
   }
 }
