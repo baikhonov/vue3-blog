@@ -33,11 +33,12 @@
         <div class="loader"></div>
         <p class="loader-text">Загружаем посты...</p>
       </div>
-      <my-navigation
-        :totalPages="this.totalPages"
-        :activePage="this.page"
-        @changePage="changeCurrentPage"
-      ></my-navigation>
+      <div ref="observer" class="observer"></div>
+<!--      <my-navigation-->
+<!--        :totalPages="this.totalPages"-->
+<!--        :activePage="this.page"-->
+<!--        @changePage="changeCurrentPage"-->
+<!--      ></my-navigation>-->
     </main>
   </div>
 </template>
@@ -95,17 +96,46 @@ export default {
         this.isPostsLoading = false;
       }
     },
-    changeCurrentPage(pageNumber) {
-      this.page = pageNumber;
-    }
+    async loadMorePosts() {
+      try {
+        this.page += 1;
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+          params: {
+            _page: this.page,
+            _limit: this.limit,
+          }
+        });
+        this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
+        this.posts = [...this.posts, ...response.data];
+      } catch (e) {
+        alert(`Ошибка ${e}`);
+      }
+    },
+    // changeCurrentPage(pageNumber) {
+    //   this.page = pageNumber;
+    // }
   },
   mounted() {
     this.fetchPosts();
+    const options = {
+      rootMargin: "0px",
+      scrollMargin: "0px",
+      threshold: 1.0,
+    };
+
+    const callback = (entries, observer) => {
+      if (entries[0].isIntersecting && this.page < this.totalPages) {
+        this.loadMorePosts();
+      }
+    };
+
+    const observer = new IntersectionObserver(callback, options);
+    observer.observe(this.$refs.observer);
   },
   watch: {
-    page() {
-      this.fetchPosts();
-    }
+    // page() {
+    //   this.fetchPosts();
+    // }
   },
   computed: {
     sortedPosts() {
@@ -125,6 +155,11 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 .app {
@@ -255,5 +290,10 @@ export default {
   .loader-text {
     font-size: 15px;
   }
+}
+.observer {
+  //width: 100%;
+  //height: 30px;
+  //background: green;
 }
 </style>
