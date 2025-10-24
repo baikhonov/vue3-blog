@@ -38,7 +38,7 @@ export default {
 <style scoped>
 .my-select {
   width: 100%;
-  max-width: 200px;
+  min-width: 200px;
   padding: 12px 16px;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
