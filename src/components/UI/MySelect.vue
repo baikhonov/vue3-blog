@@ -37,7 +37,6 @@ export default {
 
 <style scoped>
 .my-select {
-  width: 100%;
   min-width: 200px;
   padding: 12px 16px;
   border: 1px solid #e2e8f0;

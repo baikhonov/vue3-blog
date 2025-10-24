@@ -181,6 +181,7 @@ export default {
 }
 
 .app-main {
+  max-width: 800px;
   padding: 0 20px;
 }
 

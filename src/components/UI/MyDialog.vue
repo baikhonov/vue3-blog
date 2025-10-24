@@ -11,18 +11,14 @@
 </template>
 
 <script>
+import toggleMixin from "@/mixins/toggleMixin";
+
 export default {
   name: "my-dialog",
-  props: {
-    show: {
-      type: Boolean,
-      default: false
-    }
-  },
+  mixins: [
+      toggleMixin
+  ],
   methods: {
-    hideDialog() {
-      this.$emit('update:show', false);
-    },
     handleKeydown(event) {
       // Закрытие по Escape
       if (event.key === 'Escape') {
@@ -69,6 +65,7 @@ export default {
     }
   },
   mounted() {
+    console.log('dialog mounted');
     if (this.show) {
       document.addEventListener('keydown', this.handleKeydown);
     }
