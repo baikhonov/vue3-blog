@@ -3,6 +3,7 @@
     <header class="app-header">
       <my-input
           v-model="searchQuery"
+          v-focus
           placeholder="Поиск"
       ></my-input>
       <div class="app-header-btns">
@@ -32,12 +33,11 @@
         <div class="loader"></div>
         <p class="loader-text">Загружаем посты...</p>
       </div>
-      <div ref="observer" class="observer"></div>
-      <!--      <my-navigation-->
-      <!--        :totalPages="this.totalPages"-->
-      <!--        :activePage="this.page"-->
-      <!--        @changePage="changeCurrentPage"-->
-      <!--      ></my-navigation>-->
+      <div
+          v-intersection="loadMorePosts"
+          class="observer"
+          v-if="page < totalPages && !isPostsLoading"
+      ></div>
     </main>
   </div>
 </template>
@@ -96,6 +96,10 @@ export default {
       }
     },
     async loadMorePosts() {
+      if (this.page >= this.totalPages) {
+        return;
+      }
+
       try {
         this.page += 1;
         const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
@@ -116,20 +120,20 @@ export default {
   },
   mounted() {
     this.fetchPosts();
-    const options = {
-      rootMargin: "0px",
-      scrollMargin: "0px",
-      threshold: 1.0,
-    };
-
-    const callback = (entries, observer) => {
-      if (entries[0].isIntersecting && this.page < this.totalPages) {
-        this.loadMorePosts();
-      }
-    };
-
-    const observer = new IntersectionObserver(callback, options);
-    observer.observe(this.$refs.observer);
+    // const options = {
+    //   rootMargin: "0px",
+    //   scrollMargin: "0px",
+    //   threshold: 1.0,
+    // };
+    //
+    // const callback = (entries, observer) => {
+    //   if (entries[0].isIntersecting && this.page < this.totalPages) {
+    //     this.loadMorePosts();
+    //   }
+    // };
+    //
+    // const observer = new IntersectionObserver(callback, options);
+    // observer.observe(this.$refs.observer);
   },
   watch: {
     // page() {
@@ -174,6 +178,10 @@ export default {
   display: flex;
   justify-content: space-between;
   gap: 12px;
+}
+
+.app-main {
+  padding: 0 20px;
 }
 
 .loader-container {
@@ -221,10 +229,6 @@ export default {
     text-align: center;
   }
 
-  .app-title {
-    font-size: 28px;
-  }
-
   .loader-container {
     padding: 40px 16px;
   }
@@ -246,8 +250,8 @@ export default {
     padding: 0 12px;
   }
 
-  .app-title {
-    font-size: 24px;
+  .app-main {
+    padding: 0 12px;
   }
 
   .loader-container {
@@ -265,8 +269,6 @@ export default {
   }
 }
 .observer {
-//width: 100%;
-//height: 30px;
-//background: green;
+  height: 10px;
 }
 </style>

@@ -4,6 +4,7 @@
     <div class="form-group">
       <my-input
           v-model="post.title"
+          v-focus
           placeholder="Название"
       ></my-input>
     </div>

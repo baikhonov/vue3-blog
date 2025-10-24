@@ -30,6 +30,8 @@ html, body {
 .app {
   background: #f8fafc;
   min-height: 100vh;
+  padding: 0 0 10px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
