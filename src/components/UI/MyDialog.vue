@@ -65,7 +65,6 @@ export default {
     }
   },
   mounted() {
-    console.log('dialog mounted');
     if (this.show) {
       document.addEventListener('keydown', this.handleKeydown);
     }
